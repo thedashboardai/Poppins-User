@@ -1,0 +1,5 @@
+export const DEFAULT_THEME_COLOR = "#6905DB";
+export const FACEBOOK_BUTTON_COLOR = "#1478FF";
+export const LIGHT_BUTTON_COLOR = "#F1F2FA";
+export const DISABLE_BUTTON_COLOR = "#DFE1F1";
+export const DISABLE_BUTTON_TEXT_COLOR = "#222533";

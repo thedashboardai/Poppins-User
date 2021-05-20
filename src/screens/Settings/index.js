@@ -16,11 +16,12 @@ import { logout } from '../../stores/actions/user.action'
 
 const Settings = ({ navigation, userDetails, logout }) => {
   const [show, setIshow] = useState(false)
+  const [fullName, setFullName] = useState(userDetails.payload.name)
   const [list] = useState([
     {
-      title: userDetails?.payload?.name,
+      title: fullName,
       subtitle: userDetails?.payload?.phone,
-      avatarText: userDetails?.payload.name.slice(0, 2),
+      avatarText: fullName.slice(0, 2),
       avatar: true,
       onPress: () => navigation.navigate('Profile')
     },

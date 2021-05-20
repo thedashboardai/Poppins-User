@@ -27,31 +27,22 @@ const SignUp = ({ navigation, userRegister }) => {
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [password, setPassword] = useState('')
+  const [VehicleModel, setVehicleModel] = useState('')
+  const [VehicleColor, setVehicleColor] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [phone, setPhone] = useState('')
   const [phoneError, setPhoneError] = useState('')
 
   const validate = () => {
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     setFirstNameError(firstName ? '' : 'First Name is required')
     setLastNameError(lastName ? '' : 'Last Name is required')
     setUsernameError(username ? '' : 'Username is required')
     setPhoneError(phone ? '' : 'Phone is required')
-    setEmailError(
-      email
-        ? reg.test(email)
-          ? ''
-          : 'Email not formatted'
-        : 'Email is required'
-    )
+    setEmailError(email ? '' : 'Email is required')
     setPasswordError(password ? '' : 'Password is required')
 
     if (firstName && lastName && username && email && password && phone) {
-      if (reg.test(email)) {
-        return true
-      } else {
-        return false
-      }
+      return true
     } else {
       return false
     }
@@ -67,7 +58,9 @@ const SignUp = ({ navigation, userRegister }) => {
         last_name: lastName,
         password: password,
         email: email,
-        phone: phone
+        phone: phone,
+        vehicle_make_model: VehicleModel,
+        vehicle_color: VehicleColor
       }
       let { status } = await userRegister(user)
       if (status) {
@@ -144,6 +137,22 @@ const SignUp = ({ navigation, userRegister }) => {
               keyboardType="default"
             />
             <RenderError errorText={phoneError} />
+          </View>
+          <View style={styles.blockContainer}>
+            <Input
+              label="Vehicle Model"
+              onChangeText={setVehicleModel}
+              value={VehicleModel}
+              keyboardType="default"
+            />
+          </View>
+          <View style={styles.blockContainer}>
+            <Input
+              label="Vehicle Color"
+              onChangeText={setVehicleColor}
+              value={VehicleColor}
+              keyboardType="default"
+            />
           </View>
           <View style={styles.blockContainer}>
             <Input

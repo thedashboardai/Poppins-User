@@ -99,19 +99,18 @@ export const Map = ({
           : { text: 'NA', value: 'NA' }
       )
 
-      if (res.data.rows[0].elements[0]?.duration.value <= 207) {
-        console.log(
-          '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-        )
-        if (Notify) {
-          showNotification(
-            'Poppins: You are 3 mins away. Order #' + order?.id,
-            'Restaurant Notified',
-            order
-          )
-          setNotify(false)
-        }
-      }
+      // if (res.data.rows[0].elements[0]?.duration.value <= 207) {
+      //   console.log(
+      //     '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+      //   )
+      //   if (Notify) {
+      //     showNotification(
+      //       'Poppins: You are 3 mins away. Order #' + order?.id, 'Resatuarant Notified'
+      //       order
+      //     )
+      //     setNotify(false)
+      //   }
+      // }
       setLoading(false)
 
       try {

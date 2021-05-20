@@ -31,7 +31,7 @@ const Home = ({ navigation, user, resturants, getAllMerchant }) => {
 
   useEffect(() => {
     getAllMerchant()
-  }, [isFocused])
+  }, [])
 
   console.log('resturants', resturants)
   const [showFilter, setShowFilter] = useState(false)

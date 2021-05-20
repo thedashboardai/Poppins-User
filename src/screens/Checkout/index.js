@@ -79,7 +79,7 @@ const Checkout = ({ navigation }) => {
           'https://poppins-order-service.herokuapp.com/order_creation/get_order_items/' +
             cart_content?.payload.id
         )
-        // console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&', res.data.payload.length)
+        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&', res.data)
         setItems(res.data.payload)
         const requests = []
         res.data.payload.forEach(item => {
@@ -90,25 +90,34 @@ const Checkout = ({ navigation }) => {
             )
           )
         })
-        // console.log('///////////////', requests.length)
-        Promise.all(requests).then(result => {
+        console.log('///////////////', requests.length)
+        await Promise.all(requests).then(result => {
           let op = []
           op = result.map(r => r.data.payload)
-          //   console.log('!!!!!!!!!!!!!!!!!!', op)
-          dispatch({ type: 'FETCH_ITEM_DETAILS', payload: op })
-          //   console.log(
-          //     ':::::::::::::::::::::::::::',
-          //     Details?.find(e => e.id == 15)
-          //   )
+          console.log('!!!!!!!!!!!!!!!!!!', op)
+          setDetails(op)
+          // dispatch({ type: 'FETCH_ITEM_DETAILS', payload: op })
+          console.log(
+            ':::::::::::::::::::::::::::',
+            Details?.find(e => e.id == 15)
+          )
         })
-        let sum = 0
-        res.data.payload.map(item => {
-          //   console.log('------------------------------')
-          let itemObj = Details?.find(e => e.id == item?.item_id)
-          //   console.log(item, itemObj)
-          sum += itemObj?.base_price * item?.quantity
-        })
-        setsubTotal(sum)
+        // let sum = 0
+        // res.data.payload.map(item => {
+        //   let itemObj = Details?.find(e => e.id == item?.item_id)
+        //   //   console.log(item, itemObj)
+        //   console.log(
+        //     '------------------------------',
+        //     Details,
+        //     item,
+        //     itemObj,
+        //     itemObj?.base_price * item?.quantity
+        //   )
+        //   sum += itemObj?.base_price * item?.quantity
+        // })
+
+        // console.log('#######################', sum)
+        // setsubTotal(sum)
 
         const merchRes = await axios.get(
           ' http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_merchant/' +
@@ -126,6 +135,25 @@ const Checkout = ({ navigation }) => {
       console.error(e, cust_id)
     }
   }
+
+  useEffect(() => {
+    let sum = 0
+    items.map(item => {
+      let itemObj = Details?.find(e => e.id == item?.item_id)
+      //   console.log(item, itemObj)
+      console.log(
+        '------------------------------',
+        Details,
+        item,
+        itemObj,
+        itemObj?.base_price * item?.quantity
+      )
+      sum += itemObj?.base_price * item?.quantity
+    })
+
+    console.log('#######################', sum)
+    setsubTotal(sum)
+  }, [Details])
 
   const placeOrder = async () => {
     const res = await axios.post(
@@ -231,7 +259,7 @@ const Checkout = ({ navigation }) => {
 
           {Details?.length ? (
             items?.map(item => (
-              <View style={styles.cartDetails}>
+              <View key={item?.id} style={styles.cartDetails}>
                 <View>
                   <Text style={[fontStyles.ProximaSemiBoldSmall]}>
                     {item.quantity} x{' '}

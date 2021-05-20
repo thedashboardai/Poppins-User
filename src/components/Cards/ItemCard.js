@@ -33,7 +33,7 @@ export const ItemCard = ({
         <Image
           source={
             item?.item_image_url && item?.item_image_url !== 'Not Available'
-              ? item?.item_image_url
+              ? { uri: item?.item_image_url }
               : itemImg
           }
           style={[styles.defaultImageStyle, imageStyle]}

@@ -155,6 +155,15 @@ const Checkout = ({ navigation }) => {
     setsubTotal(sum)
   }, [Details])
 
+  const emptyCart = async () => {
+    const res = await axios.put(
+      'https://poppins-order-service.herokuapp.com/order_creation/empty_cart/' +
+        orderId
+    )
+    console.log(res.data)
+    navigation.navigate('Home')
+  }
+
   const placeOrder = async () => {
     const res = await axios.post(
       'https://poppins-order-service.herokuapp.com/order_creation/place_order/' +
@@ -366,6 +375,12 @@ const Checkout = ({ navigation }) => {
                 title="Place Order"
                 containerStyle={{ marginTop: 20 }}
                 onPress={placeOrder}
+              />
+              <Button
+                title="Empty Cart"
+                backgroundColor={'#FFBE00'}
+                containerStyle={{ marginTop: 20 }}
+                onPress={emptyCart}
               />
             </View>
           ) : (

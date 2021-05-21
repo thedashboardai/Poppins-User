@@ -71,7 +71,7 @@ export const PendingOrderCard = ({
       if (AcceptedNotify) {
         AcceptedNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Accepted',
+          'Order #' + orderObj?.id + ' Accepted 😎',
           'Your order has been accepted. You can start driving to pickup  your order.',
           orderObj
         )
@@ -84,7 +84,7 @@ export const PendingOrderCard = ({
       if (RejectedNotify) {
         RejectedNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Rejected',
+          'Order #' + orderObj?.id + ' Rejected 😭',
           'Your order has been cancelled.',
           orderObj
         )
@@ -112,7 +112,7 @@ export const PendingOrderCard = ({
       if (CookingNotify) {
         CookingNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Cooking',
+          'Order #' + orderObj?.id + ' Cooking 🍳',
           'Your order is in the kitchen.',
           orderObj
         )
@@ -121,7 +121,7 @@ export const PendingOrderCard = ({
       if (CookedNotify) {
         CookedNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Cooked',
+          'Order #' + orderObj?.id + ' Cooked 🍲',
           'Your order is ready.',
           orderObj
         )
@@ -130,7 +130,7 @@ export const PendingOrderCard = ({
       if (CompletedNotify) {
         CompletedNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Completed',
+          'Order #' + orderObj?.id + ' Completed 😋',
           'Your order is completed. Enjoy your Meal.',
           orderObj
         )

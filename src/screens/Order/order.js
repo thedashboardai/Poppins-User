@@ -85,7 +85,7 @@ export const Order = ({ navigation }) => {
   //   getLocation()
   // }, 3000)
 
-  // const updateOrderStatus = event => {
+  const updateOrderStatus = event => {
   //   const orderObj = event?.message?.order
   //   if (orderObj?.cust_id !== cust_id) {
   //     return
@@ -95,7 +95,7 @@ export const Order = ({ navigation }) => {
   //     event
   //   )
 
-  //   getOrders()
+    getOrders()
 
     // if (event?.message?.type === 'ACCEPTED') {
     //   showNotification(
@@ -142,14 +142,14 @@ export const Order = ({ navigation }) => {
     // } else {
     //   return
     // }
-  // }
+  }
 
-  // useEffect(() => {
-  //   const orderStatusListener = pubnub.addListener({
-  //     message: updateOrderStatus
-  //   })
-  //   pubnub.subscribe({ channels })
-  // }, [])
+  useEffect(() => {
+    const orderStatusListener = pubnub.addListener({
+      message: updateOrderStatus
+    })
+    pubnub.subscribe({ channels })
+  }, [])
 
   useEffect(() => {
     getOrders()

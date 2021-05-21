@@ -11,6 +11,8 @@ import { NotificationCard } from './NotificationCard'
 const mcDonald = require('../../assets/images/mcDonald.png')
 import { useNavigation } from '@react-navigation/native'
 import { useInterval } from '../../utils/useInterval'
+import { useSelector } from 'react-redux'
+import { showNotification } from '../../..'
 import { usePubNub } from 'pubnub-react'
 
 export const PendingOrderCard = ({
@@ -24,7 +26,18 @@ export const PendingOrderCard = ({
   const [Merchant, setMerchant] = useState([])
   const [MerchantAddress, setMerchantAddress] = useState({})
   const [eta, setEta] = useState({})
+  const [cust_id, setCustId] = useState(
+    useSelector(state => state.userReducer.userId)
+  )
+  let PlacedNotify = true
+  let AcceptedNotify = true
+  let CookingNotify = true
+  let CookedNotify = true
+  let CompletedNotify = true
+  let RejectedNotify = true
+
   const pubnub = usePubNub()
+  const [channels] = useState(['orderStatus'])
 
   const getItemDetials = async () => {
     const merchRes = await axios.get(
@@ -38,6 +51,101 @@ export const PendingOrderCard = ({
     )
     setMerchantAddress(merchAddressRes.data.payload)
   }
+
+  const updateOrderStatus = event => {
+    const orderObj = event?.message?.order
+    if (orderObj?.cust_id !== cust_id || orderObj?.id !== order?.id) {
+      return
+    }
+
+    console.log(
+      'PUBNUB {{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
+      event
+    )
+
+    if (event?.message?.type === 'ACCEPTED') {
+      console.log(
+        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+        AcceptedNotify
+      )
+      if (AcceptedNotify) {
+        AcceptedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Accepted',
+          'Your order has been accepted. You can start driving to pickup  your order.',
+          orderObj
+        )
+      }
+      console.log(
+        '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',
+        AcceptedNotify
+      )
+    } else if (event?.message?.type === 'REJECTED') {
+      if (RejectedNotify) {
+        RejectedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Rejected',
+          'Your order has been cancelled.',
+          orderObj
+        )
+      }
+    } else if (event?.message?.type === 'NEW') {
+      // console.log('88888888888888888888888888888888888', PlacedNotified)
+      // if (PlacedNotified.includes(orderObj?.id)) {
+      //   return
+      // }
+      // PlacedNotified.push(orderObj?.id)
+      // console.log('77777777777777777777777777777777777', PlacedNotified)
+      console.log(
+        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+        PlacedNotify
+      )
+      if (PlacedNotify) {
+        showNotification(
+          'Order #' + orderObj?.id + ' Placed',
+          'Waiting for restaurant confirmation.',
+          orderObj
+        )
+        PlacedNotify = false
+      }
+    } else if (event?.message?.type === 'PREPARE') {
+      if (CookingNotify) {
+        CookingNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Cooking',
+          'Your order is in the kitchen.',
+          orderObj
+        )
+      }
+    } else if (event?.message?.type === 'READY') {
+      if (CookedNotify) {
+        CookedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Cooked',
+          'Your order is ready.',
+          orderObj
+        )
+      }
+    } else if (event?.message?.type === 'COMPLETE') {
+      if (CompletedNotify) {
+        CompletedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Completed',
+          'Your order is completed. Enjoy your Meal.',
+          orderObj
+        )
+      }
+    } else {
+      return
+    }
+  }
+
+  useEffect(() => {
+    const orderStatusListener = pubnub.addListener({
+      message: updateOrderStatus
+    })
+    pubnub.subscribe({ channels })
+  }, [])
 
   useEffect(() => {
     getItemDetials()

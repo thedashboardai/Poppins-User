@@ -27,6 +27,7 @@ import GetLocation from 'react-native-get-location'
 import { Button } from 'native-base'
 import LocationEnabler from 'react-native-location-enabler'
 import { usePubNub } from 'pubnub-react'
+import { showNotification } from '../../..'
 
 const mcDonald = require('../../assets/images/mcDonald.png')
 
@@ -55,6 +56,8 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const dispatch = useDispatch()
   const pubnub = usePubNub()
   const [channels] = useState(['orderStatus'])
+
+  let PlacedNotify = true
 
   const [enabled, requestResolution] = useLocationSettings(
     {
@@ -91,7 +94,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
 
   const updateOrderStatus = event => {
     const orderObj = event?.message?.order
-    if (orderObj?.cust_id !== cust_id) {
+    if (orderObj?.cust_id !== cust_id || orderObj?.id !== order?.id) {
       return
     }
 
@@ -99,10 +102,6 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       navigation.navigate('Home')
     }
   }
-
-  useEffect(() => {
-    console.log('WWWWWWWWWWWWWWWWWWWWWWWWW', userLocation)
-  }, [userLocation])
 
   useEffect(() => {
     const orderStatusListener = pubnub.addListener({

@@ -36,12 +36,14 @@ export const Order = ({ navigation }) => {
   const pubnub = usePubNub()
   const [channels] = useState(['orderStatus'])
 
+  let PlacedNotified = []
+
   const getOrders = async () => {
     const res = await axios.get(
       'https://poppins-order-service.herokuapp.com/order_creation/get_orders_by_user/' +
         cust_id
     )
-    console.log('^^^^^^^^^^^^^^^', res.data)
+    // console.log('^^^^^^^^^^^^^^^', res.data)
     if (res.data.code === 200) {
       setPendingOrders(
         res.data.payload.filter(
@@ -83,65 +85,71 @@ export const Order = ({ navigation }) => {
   //   getLocation()
   // }, 3000)
 
-  const updateOrderStatus = event => {
-    const orderObj = event?.message?.order
-    if (orderObj?.cust_id !== cust_id) {
-      return
-    }
-    console.log(
-      'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPOOOOOOOOOOOOOOOO',
-      event?.message?.order
-    )
+  // const updateOrderStatus = event => {
+  //   const orderObj = event?.message?.order
+  //   if (orderObj?.cust_id !== cust_id) {
+  //     return
+  //   }
+  //   console.log(
+  //     'PUBNUB {{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
+  //     event
+  //   )
 
-    getOrders()
+  //   getOrders()
 
-    if (event?.message?.type === 'ACCEPTED') {
-      showNotification(
-        'Order #' + orderObj?.id + ' Accepted',
-        'Your order has been accepted. You can start driving to pickup  your order.',
-        orderObj
-      )
-    } else if (event?.message?.type === 'REJECTED') {
-      showNotification(
-        'Order #' + orderObj?.id + ' Rejected',
-        'Your order has been cancelled.',
-        orderObj
-      )
-    } else if (event?.message?.type === 'NEW') {
-      showNotification(
-        'Order #' + orderObj?.id + ' Placed',
-        'Waiting for restaurant confirmation.',
-        orderObj
-      )
-    } else if (event?.message?.type === 'PREPARE') {
-      showNotification(
-        'Order #' + orderObj?.id + ' Cooking',
-        'Your order is in the kitchen.',
-        orderObj
-      )
-    } else if (event?.message?.type === 'READY') {
-      showNotification(
-        'Order #' + orderObj?.id + ' Cooked',
-        'Your order is ready.',
-        orderObj
-      )
-    } else if (event?.message?.type === 'COMPLETE') {
-      showNotification(
-        'Order #' + orderObj?.id + ' Completed',
-        'Your order is completed. Enjoy your Meal.',
-        orderObj
-      )
-    } else {
-      return
-    }
-  }
+    // if (event?.message?.type === 'ACCEPTED') {
+    //   showNotification(
+    //     'Order #' + orderObj?.id + ' Accepted',
+    //     'Your order has been accepted. You can start driving to pickup  your order.',
+    //     orderObj
+    //   )
+    // } else if (event?.message?.type === 'REJECTED') {
+    //   showNotification(
+    //     'Order #' + orderObj?.id + ' Rejected',
+    //     'Your order has been cancelled.',
+    //     orderObj
+    //   )
+    // } else if (event?.message?.type === 'NEW') {
+    //   console.log('88888888888888888888888888888888888', PlacedNotified)
+    //   if (PlacedNotified.includes(orderObj?.id)) {
+    //     return
+    //   }
+    //   PlacedNotified.push(orderObj?.id)
+    //   console.log('77777777777777777777777777777777777', PlacedNotified)
+    //   showNotification(
+    //     'Order #' + orderObj?.id + ' Placed',
+    //     'Waiting for restaurant confirmation.',
+    //     orderObj
+    //   )
+    // } else if (event?.message?.type === 'PREPARE') {
+    //   showNotification(
+    //     'Order #' + orderObj?.id + ' Cooking',
+    //     'Your order is in the kitchen.',
+    //     orderObj
+    //   )
+    // } else if (event?.message?.type === 'READY') {
+    //   showNotification(
+    //     'Order #' + orderObj?.id + ' Cooked',
+    //     'Your order is ready.',
+    //     orderObj
+    //   )
+    // } else if (event?.message?.type === 'COMPLETE') {
+    //   showNotification(
+    //     'Order #' + orderObj?.id + ' Completed',
+    //     'Your order is completed. Enjoy your Meal.',
+    //     orderObj
+    //   )
+    // } else {
+    //   return
+    // }
+  // }
 
-  useEffect(() => {
-    const orderStatusListener = pubnub.addListener({
-      message: updateOrderStatus
-    })
-    pubnub.subscribe({ channels })
-  }, [])
+  // useEffect(() => {
+  //   const orderStatusListener = pubnub.addListener({
+  //     message: updateOrderStatus
+  //   })
+  //   pubnub.subscribe({ channels })
+  // }, [])
 
   useEffect(() => {
     getOrders()
@@ -155,7 +163,7 @@ export const Order = ({ navigation }) => {
         centerText="Orders"
         leftIcon
         leftIconName="arrow-back-outline"
-        leftButtonPress={() => navigation.goBack()}
+        leftButtonPress={() => navigation.navigate('Home')}
       />
       {/* <OrderToggle onChange={active => setSeleted(active)} /> */}
       <ScrollView>

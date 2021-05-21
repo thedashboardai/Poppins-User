@@ -19,7 +19,7 @@ export const getAllMerchant = user => {
         authToken
       )
 
-      console.log(' getAllMerchant response', data)
+      // console.log(' getAllMerchant response', data)
 
       if (data.code == 200) {
         dispatch({ type: GET_ALL_MERCHANT_PROCESSED, payload: data })

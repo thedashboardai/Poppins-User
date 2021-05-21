@@ -63,10 +63,6 @@ export const NotificationCard = ({
   //   }
   // }, [])
 
-  useEffect(() => {
-    console.log('****************************************', Order)
-  }, [])
-
   return (
     <>
       <View style={[styles.rowSpacBtw, containerStyle]}>

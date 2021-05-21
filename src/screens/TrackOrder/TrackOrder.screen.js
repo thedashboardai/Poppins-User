@@ -99,7 +99,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
     }
 
     if (event?.message?.type === 'COMPLETE') {
-      navigation.navigate('Home')
+      navigation.navigate('AddReview', { order: order })
     }
   }
 

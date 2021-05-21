@@ -29,6 +29,7 @@ import { AddCard } from '../screens/PaymentCard/addCard'
 import StoreFeedback from '../screens/StoreFeedback'
 import { Order } from '../screens/Order/order'
 import TrackOrderScreen from '../screens/TrackOrder/TrackOrder.screen'
+import AddReviewScreen from '../screens/AddReview/AddReview.screen'
 const Stack = createStackNavigator()
 
 const MainNavigation = () => {
@@ -51,6 +52,7 @@ const MainNavigation = () => {
         <Stack.Screen name="RatingReview" component={RatingReview} />
         <Stack.Screen name="Orders" component={Order} />
         <Stack.Screen name="TrackOrder" component={TrackOrderScreen} />
+        <Stack.Screen name="AddReview" component={AddReviewScreen} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         <Stack.Screen
           name="TermsAndConditions"

@@ -6,7 +6,7 @@ import { fontStyles } from '../../constants/fontStyles'
 const Header = ({
     centerText = "",
     leftIcon = true,
-    leftIconName = "close",
+    leftIconName = "",
     leftButtonPress = () => { },
     renderRightComponent = () => { },
     containerStyle = {}

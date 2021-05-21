@@ -153,7 +153,6 @@ export class ParallaxDemo extends Component {
   }
 
   componentDidMount() {
-    console.log('00000000000000000000000000000000000000000', this.state.ShowCart, this.props.route.params)
     try {
       axios
         .get(

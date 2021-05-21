@@ -31,6 +31,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ItemDetail } from '../ItemDetails/ItemDetail'
 import axios from 'axios'
 import BottomTabs from '../../navigation/bottomNavigation'
+import { useSelector } from 'react-redux'
+import Cart from '../Cart'
 // import { TouchableOpacity } from 'react-native-gesture-handler'
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const IMAGE_HEIGHT = 250
@@ -106,6 +108,11 @@ export class ParallaxDemo extends Component {
           />
         ))}
       </List>
+      {this.state.ShowCart ? (
+        <Cart navigation={this.props.navigation} />
+      ) : (
+        <></>
+      )}
     </View>
   )
   heights = [500, 500]
@@ -121,16 +128,37 @@ export class ParallaxDemo extends Component {
     )
     this.state = {
       items: [],
-      selectedItem: {}
+      selectedItem: {},
+      cust_id: this.props.route.params.props.cust_id,
+      ShowCart: false
+    }
+  }
+
+  async getCart() {
+    try {
+      const response = await axios.get(
+        'https://poppins-order-service.herokuapp.com/order_creation/get_cart_frontend/' +
+          this.props.route.params.props.cust_id
+      )
+      const cart_content = await response.data
+    console.log('1111111111111111111111111111111111111', cart_content)
+      if (cart_content?.payload.id) {
+        this.setState({ ShowCart: true })
+      } else {
+        this.setState({ ShowCart: false })
+      }
+    } catch (e) {
+      console.error('6666666666666', e)
     }
   }
 
   componentDidMount() {
+    console.log('00000000000000000000000000000000000000000', this.state.ShowCart, this.props.route.params)
     try {
       axios
         .get(
           'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/internals/get_menu_by_merchant_id/' +
-            this.props.route.params.restaurant.id
+            this.props.route.params.props.restaurant.id
         )
         .then(response => {
           console.log('@@@@@@@@@@@@@@@@@', response?.data)
@@ -150,6 +178,7 @@ export class ParallaxDemo extends Component {
               .catch(e => console.error(e))
           }
         })
+      this.getCart()
     } catch (e) {
       console.log(e)
     }
@@ -157,7 +186,7 @@ export class ParallaxDemo extends Component {
 
   render() {
     // console.log('this.props', this.props.route.params.restaurant)
-    const restaurant = this.props.route.params.restaurant
+    const restaurant = this.props.route.params.props.restaurant
     const AnmatedScrollView = Animated.createAnimatedComponent(ScrollableTab)
     return (
       <View>
@@ -166,7 +195,9 @@ export class ParallaxDemo extends Component {
           closeModal={() => this.itemRef.setModalVisible(false)}
           goTo={screen => this.props.navigation.navigate(screen)}
           item={this.state.selectedItem}
-          merch_id={this.props.route.params.restaurant.id}
+          merch_id={this.props.route.params.props.restaurant.id}
+          getCart={this.getCart}
+          parentThis={this}
         />
         <Animated.View
           style={{

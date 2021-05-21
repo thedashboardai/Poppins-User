@@ -26,7 +26,10 @@ export const ItemDetail = forwardRef(
       goTo = () => {},
       closeModal = () => {},
       item,
-      merch_id
+      merch_id,
+      navigation,
+      getCart,
+      parentThis
     },
     ref
   ) => {
@@ -54,6 +57,8 @@ export const ItemDetail = forwardRef(
         )
         if (response.data.code === 200) {
           Toast.show('Item added to cart!')
+          // navigation.navigate('Home')
+          getCart.bind(parentThis)()
         }
       } catch (e) {
         console.error(e, cust_id, merch_id, item.menu_id, item.id)

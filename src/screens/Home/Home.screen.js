@@ -23,15 +23,40 @@ import { ItemDetail } from '../../components/ItemDetails/ItemDetail'
 import { getAllMerchant } from '../../stores/actions/resturantAction'
 import Button from '../../components/Button'
 import { useFocusEffect, useIsFocused } from '@react-navigation/core'
+import Header from '../../components/Header'
+import axios from 'axios'
+import Cart from '../../components/Cart'
 
 const Home = ({ navigation, user, resturants, getAllMerchant }) => {
   const FilterRef = createRef()
   const itemRef = createRef()
   const isFocused = useIsFocused()
+  const [cust_id, setCustId] = useState(
+    useSelector(state => state.userReducer.userId)
+  )
+  const [ShowCart, setShowCart] = useState(false)
+
+  const getCart = async () => {
+    try {
+      const response = await axios.get(
+        'https://poppins-order-service.herokuapp.com/order_creation/get_cart_frontend/' +
+          cust_id
+      )
+      const cart_content = await response.data
+      if (cart_content?.payload.id) {
+        setShowCart(true)
+      } else {
+        setShowCart(false)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   useEffect(() => {
     getAllMerchant()
-  }, [])
+    getCart()
+  }, [isFocused])
 
   console.log('resturants', resturants)
   const [showFilter, setShowFilter] = useState(false)
@@ -40,7 +65,7 @@ const Home = ({ navigation, user, resturants, getAllMerchant }) => {
     <View style={styles.mainContainer}>
       <SearchFilter ref={FilterRef} />
       <ItemDetail ref={itemRef} />
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView>
         <ScrollView>
           <SearchHeader
             Component={TouchableOpacity}
@@ -91,7 +116,10 @@ const Home = ({ navigation, user, resturants, getAllMerchant }) => {
                       restaurant={item}
                       onPress={() => {
                         navigation.navigate('ResturantMenu', {
-                          restaurant: item
+                          props: {
+                            restaurant: item,
+                            cust_id: cust_id
+                          }
                         })
                       }}
                     />
@@ -103,21 +131,7 @@ const Home = ({ navigation, user, resturants, getAllMerchant }) => {
           </View>
         </ScrollView>
       </SafeAreaView>
-      <View>
-        <Button
-          onPress={() => navigation.navigate('Checkout')}
-          title={'Checkout'}
-          backgroundColor={'#FFBE00'}
-          containerStyle={{
-            width: '100%',
-            borderRadius: 0,
-            height: undefined,
-            paddingVertical: 10,
-            marginTop: 40,
-          }}
-          textColor="#000"
-        />
-        </View>
+      {ShowCart ? <Cart navigation={navigation} /> : <></>}
     </View>
   )
 }

@@ -161,6 +161,7 @@ const Checkout = ({ navigation }) => {
         orderId
     )
     console.log(res.data)
+
     navigation.navigate('Home')
   }
 

@@ -128,6 +128,7 @@ const Home = ({ navigation, user, resturants, getAllMerchant }) => {
               }}
               showsHorizontalScrollIndicator={false}
             />
+            <View style={{ height: 100, width: 100 }} />
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -17,12 +17,12 @@ export const HorizontalCards = props => {
     <TouchableOpacity
       onPress={props?.onPress}
       activeOpacity={0.6}
-      style={[styles.defaultConatinerStyle]}>
+      style={[styles.defaultConatinerStyle, styles.ConatinerStyle]}>
       <Image
         source={
           props?.restaurant?.profile_image_url &&
           props?.restaurant?.profile_image_url !== 'Not Available'
-            ? props?.restaurant?.profile_image_url
+            ? { uri: props?.restaurant?.profile_image_url }
             : item
         }
         style={[styles.defaultImageStyle]}

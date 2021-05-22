@@ -265,7 +265,7 @@ export class ParallaxDemo extends Component {
               source={
                 restaurant?.profile_image_url &&
                 restaurant?.profile_image_url !== 'Not Available'
-                  ? restaurant?.profile_image_url
+                  ? { uri: restaurant?.profile_image_url }
                   : require('../../assets/images/bg.png')
               }
               style={{

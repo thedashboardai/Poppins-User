@@ -71,7 +71,7 @@ export const NotificationCard = ({
             source={
               Merchant?.profile_image_url &&
               Merchant?.profile_image_url !== 'Not Available'
-                ? Merchant?.profile_image_url
+                ? { uri: Merchant?.profile_image_url }
                 : img
             }
             style={styles.imgStyle}

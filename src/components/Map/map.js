@@ -23,6 +23,7 @@ import { showNotification } from '../../..'
 import { usePubNub } from 'pubnub-react'
 import { useRef } from 'react'
 import KeepAwake from 'react-native-keep-awake'
+import Header from '../Header'
 
 const origin = { latitude: 37.3318456, longitude: -122.0296002 }
 const destination = { latitude: 22.270041, longitude: 73.149727 }
@@ -210,9 +211,13 @@ export const Map = ({
   // console.log('RRRRRRRRRRRRRRRRRRRRRRRR', dest)
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={{ fontWeight: 'bold' }}>
+      {/* <Text style={{ fontWeight: 'bold' }}>
         ETA: {fancyTimeFormat(Eta?.value)}
-      </Text>
+      </Text> */}
+      <Header
+        centerText={'ETA: ' + fancyTimeFormat(Eta?.value)}
+        leftIconName=""
+      />
       {location.latitude ? (
         <MapView
           ref={MapRef}
@@ -295,7 +300,8 @@ const styles = StyleSheet.create({
     height: Platform.OS == 'ios' ? height - 90 : height - 70,
     width: '100%',
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 30
   },
   map: {
     height: 200,

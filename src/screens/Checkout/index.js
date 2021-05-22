@@ -48,6 +48,7 @@ const Checkout = ({ navigation }) => {
   const [selected, setselected] = useState(0)
   const [subTotal, setsubTotal] = useState(0)
   const [orderId, setorderId] = useState(0)
+  const [order, setOrder] = useState({})
   const [items, setItems] = useState([])
   const [itemDetails, setItemDetails] = useState([])
   const [Merchant, setMerchant] = useState([])
@@ -75,6 +76,7 @@ const Checkout = ({ navigation }) => {
         //   Toast.show('Item added to cart!')
         console.log('@@@@@@@@@@@', cart_content)
         setorderId(cart_content?.payload.id)
+        setOrder(cart_content?.payload)
         const res = await axios.get(
           'https://poppins-order-service.herokuapp.com/order_creation/get_order_items/' +
             cart_content?.payload.id
@@ -232,7 +234,12 @@ const Checkout = ({ navigation }) => {
             title: 'Close',
             onPress: () => {
               setOrderPlaced(false)
-              navigation.navigate('Orders', { orderId: orderId })
+              navigation.navigate('TrackOrder', {
+                orderId: orderId,
+                order: order,
+                MerchantAddress: MerchantAddress,
+                Merchant: Merchant
+              })
             }
           }
         ]}

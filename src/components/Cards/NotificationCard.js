@@ -115,7 +115,8 @@ export const NotificationCard = ({
                     MerchantAddress: description,
                     eta: eta,
                     location: location,
-                    order: order
+                    order: order,
+                    Merchant: Merchant
                   })
                 }}>
                 <Text style={{ color: 'purple' }}>Track</Text>

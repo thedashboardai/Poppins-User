@@ -11,7 +11,8 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  Platform
+  Platform,
+  Linking
 } from 'react-native'
 import { fontStyles } from '../../constants/fontStyles'
 // ES6 import or TypeScript
@@ -24,10 +25,12 @@ import { NotificationCard } from '../../components/Cards/NotificationCard'
 import { Map } from '../../components/Map/map'
 import { useInterval } from '../../utils/useInterval'
 import GetLocation from 'react-native-get-location'
-import { Button } from 'native-base'
+import { Button, Image } from 'native-base'
 import LocationEnabler from 'react-native-location-enabler'
 import { usePubNub } from 'pubnub-react'
 import { showNotification } from '../../..'
+import Header from '../../components/Header'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const mcDonald = require('../../assets/images/mcDonald.png')
 
@@ -39,7 +42,7 @@ const {
 const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const [order, setOrder] = useState(route?.params?.order)
   const [image, setImage] = useState('RD')
-  const [Merchant, setMerchant] = useState([])
+  const [Merchant, setMerchant] = useState(route?.params?.Merchant)
   const [location, setLocation] = useState(route?.params?.location)
 
   const [MerchantAddress, setMerchantAddress] = useState(
@@ -120,12 +123,45 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
             orderStatus[order?.status_id] !== 'Cancelled' &&
             MerchantAddress?.latitude &&
             MerchantAddress?.latitude !== 'Unavailable' ? ( */}
+
+            <Header centerText={'Order: #' + order?.id} leftIconName="" />
+            <View style={[styles.containerStyle, styles.rowSpacBtw]}>
+              <View
+                style={[styles.row, { width: '100%', paddingHorizontal: 0 }]}>
+                <View>
+                  <Text
+                    style={[
+                      fontStyles.ProximaRegularP2,
+                      { color: '#6A7C92', minWidth: '80%', flexWrap: 'wrap' }
+                    ]}>
+                    {Merchant?.name} 📍{' '}
+                    {`${MerchantAddress?.street}, ${MerchantAddress?.city}, ${MerchantAddress?.state}, ${MerchantAddress?.country}, ${MerchantAddress?.zip_code}`}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.divider} />
+            <View style={[styles.containerStyle, styles.rowSpacBtw]}>
+              <View
+                style={[styles.row, { width: '100%', paddingHorizontal: 0 }]}>
+                <View>
+                  <Text
+                    onPress={() => Linking.openURL(`tel:${Merchant?.phone}`)}
+                    style={[
+                      fontStyles.ProximaRegularP2,
+                      { color: '#6A7C92', minWidth: '80%', flexWrap: 'wrap' }
+                    ]}>
+                    ☎️ {Merchant?.phone}
+                  </Text>
+                </View>
+              </View>
+            </View>
             <Map
               mapStyle={[styles.mapStyle, { overflow: 'hidden' }]}
               containerStyle={[styles.mapStyle, styles.mapContainer]}
               location={location}
               MerchantAddress={MerchantAddress}
-              eta={eta}
+              eta={eta?.text ? eta : { text: 'NA', value: 0 }}
               order={order}
             />
             {/* ) : (
@@ -169,13 +205,13 @@ const styles = StyleSheet.create({
   blockContainer: {
     paddingVertical: 5,
     paddingHorizontal: 15,
-    marginTop: 10
+    marginTop: 20
   },
   itemContainer: {
     paddingVertical: 5
   },
   mapStyle: {
-    height: '100%',
+    height: '77%',
     width: '100%'
   },
   mapContainer: {
@@ -187,6 +223,16 @@ const styles = StyleSheet.create({
   divider: {
     borderWidth: 1,
     borderColor: '#707070'
+  },
+  rowSpacBtw: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    padding: 10,
+    paddingVertical: 15
+  },
+  row: {
+    flexDirection: 'row'
   }
 })
 

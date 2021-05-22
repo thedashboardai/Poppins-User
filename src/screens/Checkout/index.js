@@ -397,7 +397,8 @@ const Checkout = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: '#F1F2FA',
-    flex: 1
+    flex: 1,
+    paddingTop: 20
   },
   resturantDetailsContainer: {
     // borderBottomColor: ""

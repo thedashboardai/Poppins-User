@@ -141,7 +141,7 @@ export class ParallaxDemo extends Component {
           this.props.route.params.props.cust_id
       )
       const cart_content = await response.data
-    console.log('1111111111111111111111111111111111111', cart_content)
+      console.log('1111111111111111111111111111111111111', cart_content)
       if (cart_content?.payload.id) {
         this.setState({ ShowCart: true })
       } else {
@@ -338,7 +338,9 @@ export class ParallaxDemo extends Component {
                         </Animated.View> */}
                         <Button
                           onPress={() =>
-                            this.props.navigation.navigate('StoreFeedback')
+                            this.props.navigation.navigate('StoreFeedback', {
+                              merchant: this.props.route.params.props.restaurant
+                            })
                           }
                           title={'Check Reviews'}
                           backgroundColor={'#FFBE00'}

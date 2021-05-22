@@ -38,7 +38,7 @@ function BottomTabs() {
               <Ionicons name={'ios-notifications'} size={25} color={color} />
             )
           },
-          tabBarBadge: 3,
+          tabBarBadge: 0,
           tabBarBadgeStyle: {
             backgroundColor: '#FFBE00'
           }

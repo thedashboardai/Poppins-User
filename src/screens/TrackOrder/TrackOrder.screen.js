@@ -147,6 +147,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
           'Your order has been cancelled.',
           orderObj
         )
+        navigation.navigate("Home")
       }
     } else if (event?.message?.type === 'NEW') {
       // console.log('88888888888888888888888888888888888', PlacedNotified)

@@ -235,7 +235,7 @@ export const Map = ({
           showsCompass
           rotateEnabled={false}
           showsMyLocationButton
-          mapType="hybrid"
+          mapType="standard"
           showsUserLocation={true}
           followsUserLocation={true}
           // onUserLocationChange={e => console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', e.nativeEvent)}

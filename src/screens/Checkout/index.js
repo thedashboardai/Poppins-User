@@ -99,10 +99,6 @@ const Checkout = ({ navigation }) => {
           console.log('!!!!!!!!!!!!!!!!!!', op)
           setDetails(op)
           // dispatch({ type: 'FETCH_ITEM_DETAILS', payload: op })
-          console.log(
-            ':::::::::::::::::::::::::::',
-            Details?.find(e => e.id == 15)
-          )
         })
         // let sum = 0
         // res.data.payload.map(item => {
@@ -122,16 +118,16 @@ const Checkout = ({ navigation }) => {
         // setsubTotal(sum)
 
         const merchRes = await axios.get(
-          ' http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_merchant/' +
+          'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_merchant/' +
             cart_content.payload.merch_id
         )
         setMerchant(merchRes.data.payload)
         const merchAddressRes = await axios.get(
-          ' http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_address/' +
+          'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_address/' +
             cart_content.payload.merch_id
         )
         setMerchantAddress(merchAddressRes.data.payload)
-        // console.log(merchAddressRes.data.payload)
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%!!!!!!!!!!!!!",merchAddressRes.data.payload)
       }
     } catch (e) {
       console.error(e, cust_id)
@@ -234,6 +230,8 @@ const Checkout = ({ navigation }) => {
             title: 'Close',
             onPress: () => {
               setOrderPlaced(false)
+              console.log("######@@@@@@@@@@@@@@@@############@@@@@@@@@")
+              console.log("merchantAddr: ", MerchantAddress, "merchant:", Merchant)
               navigation.navigate('TrackOrder', {
                 orderId: orderId,
                 order: order,

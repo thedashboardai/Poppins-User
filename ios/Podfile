@@ -12,13 +12,19 @@ target 'POPPINS' do
     
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config["reactNativePath"], :subspecs => [
+    'DevSupport',
+    'Core',
+    'RCTAnimation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTSettings',
+    'RCTText'
+  ])
 
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
   pod 'ReactNativeGetLocation', :path => '../node_modules/react-native-get-location'
-
-  pod 'RNOpenEspecificsSettings', :path => '../node_modules/react-native-open-especifics-settings'
 
   pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
 

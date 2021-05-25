@@ -27,10 +27,10 @@ const mcDonald = require('../../assets/images/mcDonald.png')
 
 const AddReview = ({ navigation, route, img = mcDonald }) => {
   const [order, setOrder] = useState(route?.params?.order)
-  const [MerchantRating, setMerchantRating] = useState(0)
+  const [MerchantRating, setMerchantRating] = useState(4)
   const [MerchantReview, setMerchantReview] = useState('')
   const [AppReview, setAppReview] = useState('')
-  const [AppRating, setAppRating] = useState(0)
+  const [AppRating, setAppRating] = useState(4)
 
   const restaurantRatingCompleted = rating => {
     console.log('Rating is: ' + rating)

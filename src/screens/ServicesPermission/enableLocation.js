@@ -32,15 +32,15 @@ const EnableLocation = ({ navigation, user }) => {
         modalVisibel={show}
         title="Stay updated"
         successIcon={false}
-        discription="Allow location services so POPPINS can serve you up the best experience possible"
+        discription="Turn your GPS ON so POPPINS can serve you up the best experience possible"
         buttons={[
           {
-            title: 'Enable',
+            title: 'Done',
             titleStyle: { ...fontStyles.ProximaSemiBold },
             onPress: () => {
               // Opens the GPS setting window
               Linking.openSettings()
-              navigation.navigate('Home')
+              navigation.goBack()
               setIshow(!show)
             }
           },

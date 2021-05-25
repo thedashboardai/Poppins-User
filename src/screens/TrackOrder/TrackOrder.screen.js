@@ -26,7 +26,7 @@ import { Map } from '../../components/Map/map'
 import { useInterval } from '../../utils/useInterval'
 import GetLocation from 'react-native-get-location'
 import { Button, Image } from 'native-base'
-import LocationEnabler from 'react-native-location-enabler'
+// import LocationEnabler from 'react-native-location-enabler'
 import { usePubNub } from 'pubnub-react'
 import { showNotification } from '../../..'
 import Header from '../../components/Header'
@@ -34,10 +34,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const mcDonald = require('../../assets/images/mcDonald.png')
 
-const {
-  PRIORITIES: { HIGH_ACCURACY },
-  useLocationSettings
-} = LocationEnabler
+// const {
+//   PRIORITIES: { HIGH_ACCURACY },
+//   useLocationSettings
+// } = LocationEnabler
 
 const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const [order, setOrder] = useState(route?.params?.order)
@@ -67,14 +67,14 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   let CompletedNotify = true
   let RejectedNotify = true
 
-  const [enabled, requestResolution] = useLocationSettings(
-    {
-      priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-      alwaysShow: true, // default false
-      needBle: true // default false
-    },
-    false /* optional: default undefined */
-  )
+  // const [enabled, requestResolution] = useLocationSettings(
+  //   {
+  //     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+  //     alwaysShow: true, // default false
+  //     needBle: true // default false
+  //   },
+  //   false /* optional: default undefined */
+  // )
 
   const getLocation = () => {
     GetLocation.getCurrentPosition({
@@ -92,7 +92,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       .catch(error => {
         const { code, message } = error
         console.error(code, message)
-        requestResolution()
+        navigation.navigate('EnableLocation')
       })
   }
 

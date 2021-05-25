@@ -10,14 +10,14 @@ import { useSelector } from 'react-redux'
 import orderStatus from '../../constants/orderStatus'
 import { Button } from 'native-base'
 import { useNavigation } from '@react-navigation/core'
-import LocationEnabler from 'react-native-location-enabler'
+// import LocationEnabler from 'react-native-location-enabler'
 
 const mcDonald = require('../../assets/images/mcDonald.png')
 
-const {
-  PRIORITIES: { HIGH_ACCURACY },
-  useLocationSettings
-} = LocationEnabler
+// const {
+//   PRIORITIES: { HIGH_ACCURACY },
+//   useLocationSettings
+// } = LocationEnabler
 
 export const NotificationCard = ({
   title = 'McDonalds',
@@ -41,14 +41,14 @@ export const NotificationCard = ({
     useSelector(state => state.userReducer.userId)
   )
 
-  const [enabled, requestResolution] = useLocationSettings(
-    {
-      priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-      alwaysShow: true, // default false
-      needBle: true // default false
-    },
-    false /* optional: default undefined */
-  )
+  // const [enabled, requestResolution] = useLocationSettings(
+  //   {
+  //     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+  //     alwaysShow: true, // default false
+  //     needBle: true // default false
+  //   },
+  //   false /* optional: default undefined */
+  // )
 
   // useEffect(() => {
   //   socket.on(cust_id + ' order updates', param => {
@@ -107,9 +107,9 @@ export const NotificationCard = ({
             {order?.status_id != 5 ? (
               <TouchableOpacity
                 onPress={() => {
-                  if (!enabled) {
-                    requestResolution()
-                  }
+                  // if (!enabled) {
+                  //   navigation.navigate('EnableLocation')
+                  // }
                   navigation.navigate('TrackOrder', {
                     orderId: order?.id,
                     MerchantAddress: description,

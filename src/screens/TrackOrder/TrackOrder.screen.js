@@ -61,6 +61,11 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const [channels] = useState(['orderStatus'])
 
   let PlacedNotify = true
+  let AcceptedNotify = true
+  let CookingNotify = true
+  let CookedNotify = true
+  let CompletedNotify = true
+  let RejectedNotify = true
 
   const [enabled, requestResolution] = useLocationSettings(
     {
@@ -95,14 +100,103 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
     getLocation()
   }, 3000)
 
+  // const updateOrderStatus = event => {
+  //   const orderObj = event?.message?.order
+  //   if (orderObj?.cust_id !== cust_id || orderObj?.id !== order?.id) {
+  //     return
+  //   }
+
+  //   if (event?.message?.type === 'COMPLETE') {
+  //     navigation.navigate('AddReview', { order: order })
+  //   }
+  // }
+
   const updateOrderStatus = event => {
     const orderObj = event?.message?.order
     if (orderObj?.cust_id !== cust_id || orderObj?.id !== order?.id) {
       return
     }
 
-    if (event?.message?.type === 'COMPLETE') {
-      navigation.navigate('AddReview', { order: order })
+    console.log(
+      'PUBNUB {{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
+      event
+    )
+
+    if (event?.message?.type === 'ACCEPTED') {
+      console.log(
+        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+        AcceptedNotify
+      )
+      if (AcceptedNotify) {
+        AcceptedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Accepted 😎',
+          'Your order has been accepted. You can start driving to pickup  your order.',
+          orderObj
+        )
+      }
+      console.log(
+        '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',
+        AcceptedNotify
+      )
+    } else if (event?.message?.type === 'REJECTED') {
+      if (RejectedNotify) {
+        RejectedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Rejected 😭',
+          'Your order has been cancelled.',
+          orderObj
+        )
+      }
+    } else if (event?.message?.type === 'NEW') {
+      // console.log('88888888888888888888888888888888888', PlacedNotified)
+      // if (PlacedNotified.includes(orderObj?.id)) {
+      //   return
+      // }
+      // PlacedNotified.push(orderObj?.id)
+      // console.log('77777777777777777777777777777777777', PlacedNotified)
+      console.log(
+        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+        PlacedNotify
+      )
+      if (PlacedNotify) {
+        showNotification(
+          'Order #' + orderObj?.id + ' Placed',
+          'Waiting for restaurant confirmation.',
+          orderObj
+        )
+        PlacedNotify = false
+      }
+    } else if (event?.message?.type === 'PREPARE') {
+      if (CookingNotify) {
+        CookingNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Cooking 🍳',
+          'Your order is in the kitchen.',
+          orderObj
+        )
+      }
+    } else if (event?.message?.type === 'READY') {
+      if (CookedNotify) {
+        CookedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Cooked 🍲',
+          'Your order is ready.',
+          orderObj
+        )
+      }
+    } else if (event?.message?.type === 'COMPLETE') {
+      if (CompletedNotify) {
+        CompletedNotify = false
+        showNotification(
+          'Order #' + orderObj?.id + ' Completed 😋',
+          'Your order is completed. Enjoy your Meal.',
+          orderObj
+        )
+        navigation.navigate('AddReview', { order: order })
+      }
+    } else {
+      return
     }
   }
 
@@ -124,7 +218,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
             MerchantAddress?.latitude &&
             MerchantAddress?.latitude !== 'Unavailable' ? ( */}
 
-            <Header centerText={'Order: #' + order?.id} leftIconName="" />
+            <Header centerText={'Order: #' + order?.id} />
             <View style={[styles.containerStyle, styles.rowSpacBtw]}>
               <View
                 style={[styles.row, { width: '100%', paddingHorizontal: 0 }]}>

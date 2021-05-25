@@ -27,7 +27,7 @@ const mcDonald = require('../../assets/images/mcDonald.png')
 
 const AddReview = ({ navigation, route, img = mcDonald }) => {
   const [order, setOrder] = useState(route?.params?.order)
-  const [MerchantRating, setMerchantRating] = useState('')
+  const [MerchantRating, setMerchantRating] = useState(0)
   const [MerchantReview, setMerchantReview] = useState('')
   const [AppReview, setAppReview] = useState('')
   const [AppRating, setAppRating] = useState(0)
@@ -45,7 +45,8 @@ const AddReview = ({ navigation, route, img = mcDonald }) => {
   const submitRating = async () => {
     console.log(
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
-      order,
+      order?.id,
+      order?.merch_id,
       MerchantRating,
       MerchantReview,
       AppRating,
@@ -63,7 +64,7 @@ const AddReview = ({ navigation, route, img = mcDonald }) => {
           experience_review: AppReview
         }
       )
-    console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkk', res.data);
+      console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkk', res.data)
       if (res.data.code === 200) {
         navigation.navigate('Home')
       }

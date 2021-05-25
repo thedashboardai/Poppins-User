@@ -63,81 +63,81 @@ export const PendingOrderCard = ({
       event
     )
 
-    if (event?.message?.type === 'ACCEPTED') {
-      console.log(
-        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
-        AcceptedNotify
-      )
-      if (AcceptedNotify) {
-        AcceptedNotify = false
-        showNotification(
-          'Order #' + orderObj?.id + ' Accepted 😎',
-          'Your order has been accepted. You can start driving to pickup  your order.',
-          orderObj
-        )
-      }
-      console.log(
-        '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',
-        AcceptedNotify
-      )
-    } else if (event?.message?.type === 'REJECTED') {
-      if (RejectedNotify) {
-        RejectedNotify = false
-        showNotification(
-          'Order #' + orderObj?.id + ' Rejected 😭',
-          'Your order has been cancelled.',
-          orderObj
-        )
-      }
-    } else if (event?.message?.type === 'NEW') {
-      // console.log('88888888888888888888888888888888888', PlacedNotified)
-      // if (PlacedNotified.includes(orderObj?.id)) {
-      //   return
-      // }
-      // PlacedNotified.push(orderObj?.id)
-      // console.log('77777777777777777777777777777777777', PlacedNotified)
-      console.log(
-        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
-        PlacedNotify
-      )
-      if (PlacedNotify) {
-        showNotification(
-          'Order #' + orderObj?.id + ' Placed',
-          'Waiting for restaurant confirmation.',
-          orderObj
-        )
-        PlacedNotify = false
-      }
-    } else if (event?.message?.type === 'PREPARE') {
-      if (CookingNotify) {
-        CookingNotify = false
-        showNotification(
-          'Order #' + orderObj?.id + ' Cooking 🍳',
-          'Your order is in the kitchen.',
-          orderObj
-        )
-      }
-    } else if (event?.message?.type === 'READY') {
-      if (CookedNotify) {
-        CookedNotify = false
-        showNotification(
-          'Order #' + orderObj?.id + ' Cooked 🍲',
-          'Your order is ready.',
-          orderObj
-        )
-      }
-    } else if (event?.message?.type === 'COMPLETE') {
-      if (CompletedNotify) {
-        CompletedNotify = false
-        showNotification(
-          'Order #' + orderObj?.id + ' Completed 😋',
-          'Your order is completed. Enjoy your Meal.',
-          orderObj
-        )
-      }
-    } else {
-      return
-    }
+    // if (event?.message?.type === 'ACCEPTED') {
+    //   console.log(
+    //     '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+    //     AcceptedNotify
+    //   )
+    //   if (AcceptedNotify) {
+    //     AcceptedNotify = false
+    //     showNotification(
+    //       'Order #' + orderObj?.id + ' Accepted 😎',
+    //       'Your order has been accepted. You can start driving to pickup  your order.',
+    //       orderObj
+    //     )
+    //   }
+    //   console.log(
+    //     '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',
+    //     AcceptedNotify
+    //   )
+    // } else if (event?.message?.type === 'REJECTED') {
+    //   if (RejectedNotify) {
+    //     RejectedNotify = false
+    //     showNotification(
+    //       'Order #' + orderObj?.id + ' Rejected 😭',
+    //       'Your order has been cancelled.',
+    //       orderObj
+    //     )
+    //   }
+    // } else if (event?.message?.type === 'NEW') {
+    //   // console.log('88888888888888888888888888888888888', PlacedNotified)
+    //   // if (PlacedNotified.includes(orderObj?.id)) {
+    //   //   return
+    //   // }
+    //   // PlacedNotified.push(orderObj?.id)
+    //   // console.log('77777777777777777777777777777777777', PlacedNotified)
+    //   console.log(
+    //     '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+    //     PlacedNotify
+    //   )
+    //   if (PlacedNotify) {
+    //     showNotification(
+    //       'Order #' + orderObj?.id + ' Placed',
+    //       'Waiting for restaurant confirmation.',
+    //       orderObj
+    //     )
+    //     PlacedNotify = false
+    //   }
+    // } else if (event?.message?.type === 'PREPARE') {
+    //   if (CookingNotify) {
+    //     CookingNotify = false
+    //     showNotification(
+    //       'Order #' + orderObj?.id + ' Cooking 🍳',
+    //       'Your order is in the kitchen.',
+    //       orderObj
+    //     )
+    //   }
+    // } else if (event?.message?.type === 'READY') {
+    //   if (CookedNotify) {
+    //     CookedNotify = false
+    //     showNotification(
+    //       'Order #' + orderObj?.id + ' Cooked 🍲',
+    //       'Your order is ready.',
+    //       orderObj
+    //     )
+    //   }
+    // } else if (event?.message?.type === 'COMPLETE') {
+    //   if (CompletedNotify) {
+    //     CompletedNotify = false
+    //     showNotification(
+    //       'Order #' + orderObj?.id + ' Completed 😋',
+    //       'Your order is completed. Enjoy your Meal.',
+    //       orderObj
+    //     )
+    //   }
+    // } else {
+    //   return
+    // }
   }
 
   useEffect(() => {

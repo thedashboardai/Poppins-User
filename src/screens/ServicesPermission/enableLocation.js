@@ -39,7 +39,6 @@ const EnableLocation = ({ navigation, user }) => {
             titleStyle: { ...fontStyles.ProximaSemiBold },
             onPress: () => {
               // Opens the GPS setting window
-              Linking.openSettings()
               navigation.goBack()
               setIshow(!show)
             }

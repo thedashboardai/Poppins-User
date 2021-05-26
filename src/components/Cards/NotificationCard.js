@@ -104,30 +104,30 @@ export const NotificationCard = ({
             {/* {orderStatus[order?.status_id] !== 'Placed' &&
             orderStatus[order?.status_id] !== 'Rejected' &&
             orderStatus[order?.status_id] !== 'Cancelled' ? ( */}
-            {order?.status_id != 5 ? (
-              <TouchableOpacity
-                onPress={() => {
-                  // if (!enabled) {
-                  //   navigation.navigate('EnableLocation')
-                  // }
-                  navigation.navigate('TrackOrder', {
-                    orderId: order?.id,
-                    MerchantAddress: description,
-                    eta: eta,
-                    location: location,
-                    order: order,
-                    Merchant: Merchant
-                  })
-                }}>
-                <Text style={{ color: 'purple' }}>Track</Text>
-              </TouchableOpacity>
-            ) : (
+            {/* {order?.status_id != 5 ? ( */}
+            <TouchableOpacity
+              onPress={() => {
+                // if (!enabled) {
+                //   navigation.navigate('EnableLocation')
+                // }
+                navigation.navigate('TrackOrder', {
+                  orderId: order?.id,
+                  MerchantAddress: description,
+                  eta: eta,
+                  location: location,
+                  order: order,
+                  Merchant: Merchant
+                })
+              }}>
+              <Text style={{ color: 'purple' }}>Track</Text>
+            </TouchableOpacity>
+            {/* ) : (
               <View>
                 <Text style={{ color: 'gray', fontStyle: 'italic' }}>
                   Waiting for Restaurant to Accept
                 </Text>
               </View>
-            )}
+            )} */}
             {/* ) : (
               <></>
             )} */}

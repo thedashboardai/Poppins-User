@@ -93,7 +93,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       .catch(error => {
         const { code, message } = error
         console.error(code, message)
-        if (!enabled) {
+        if (Platform.OS == 'android' && !enabled) {
           navigation.navigate('EnableLocation')
           setEnabled(true)
         }

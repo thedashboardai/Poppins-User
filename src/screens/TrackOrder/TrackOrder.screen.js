@@ -31,6 +31,7 @@ import { usePubNub } from 'pubnub-react'
 import { showNotification } from '../../..'
 import Header from '../../components/Header'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import CustomModal from '../../components/Modal'
 
 const mcDonald = require('../../assets/images/mcDonald.png')
 
@@ -45,7 +46,11 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const [Merchant, setMerchant] = useState(route?.params?.Merchant)
   const [location, setLocation] = useState(route?.params?.location)
   const [enabled, setEnabled] = useState(false)
-
+  const [show, setShow] = useState(false)
+  const [items, setItems] = useState([])
+  const [Details, setDetails] = useState(
+    useSelector(state => state.userReducer.ItemDetails)
+  )
   const [MerchantAddress, setMerchantAddress] = useState(
     route?.params?.MerchantAddress
   )
@@ -205,6 +210,36 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
     }
   }
 
+  const getOrderItems = async () => {
+    const res = await axios.get(
+      'https://poppins-order-service.herokuapp.com/order_creation/get_order_items/' +
+        order?.id
+    )
+    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&', res.data)
+    setItems(res.data.payload)
+    const requests = []
+    res.data.payload.forEach(item => {
+      requests.push(
+        axios.get(
+          'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/internals/get_item/' +
+            item.item_id
+        )
+      )
+    })
+    console.log('///////////////', requests.length)
+    await Promise.all(requests).then(result => {
+      let op = []
+      op = result.map(r => r.data.payload)
+      console.log('!!!!!!!!!!!!!!!!!!', op)
+      setDetails(op)
+      // dispatch({ type: 'FETCH_ITEM_DETAILS', payload: op })
+    })
+  }
+
+  useEffect(() => {
+    getOrderItems()
+  }, [])
+
   useEffect(() => {
     const orderStatusListener = pubnub.addListener({
       message: updateOrderStatus
@@ -214,6 +249,22 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
 
   return (
     <View style={[styles.blockContainer, { top: 10 }]}>
+      <CustomModal
+        modalVisibel={show}
+        successIcon
+        title="Order Items"
+        discription={Details?.map(
+          (item, index) => index + 1 + '.' + item?.name
+        ).join('\n')}
+        buttons={[
+          {
+            title: 'Close',
+            onPress: () => {
+              setShow(false)
+            }
+          }
+        ]}
+      />
       <View style={styles.main}>
         {order ? (
           <View style={[styles.blockContainer]}>
@@ -260,6 +311,16 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
                 </View>
               </View>
             </View>
+            <View style={styles.divider} />
+
+            <View style={[styles.headerContainer]}>
+              <Text
+                style={[styles.orderitemstitle]}
+                onPress={() => setShow(true)}>
+                See Order Items
+              </Text>
+            </View>
+
             <Map
               mapStyle={[styles.mapStyle, { overflow: 'hidden' }]}
               containerStyle={[styles.mapStyle, styles.mapContainer]}
@@ -315,8 +376,22 @@ const styles = StyleSheet.create({
     paddingVertical: 5
   },
   mapStyle: {
-    height: '77%',
+    height: '67%',
     width: '100%'
+  },
+  headerContainer: {
+    width: '100%',
+    borderBottomColor: '#E6F0FC',
+    borderBottomWidth: 1,
+    height: Platform.OS == 'ios' ? 70 : 40,
+    backgroundColor: '#fff',
+    paddingVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingTop: Platform.OS == 'ios' ? 40 : 0
+  },
+  orderitemstitle: {
+    paddingHorizontal: 20
   },
   mapContainer: {
     justifyContent: 'flex-start',

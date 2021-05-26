@@ -44,6 +44,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const [image, setImage] = useState('RD')
   const [Merchant, setMerchant] = useState(route?.params?.Merchant)
   const [location, setLocation] = useState(route?.params?.location)
+  const [enabled, setEnabled] = useState(false)
 
   const [MerchantAddress, setMerchantAddress] = useState(
     route?.params?.MerchantAddress
@@ -92,7 +93,10 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       .catch(error => {
         const { code, message } = error
         console.error(code, message)
-        navigation.navigate('EnableLocation')
+        if (!enabled) {
+          navigation.navigate('EnableLocation')
+          setEnabled(true)
+        }
       })
   }
 

@@ -41,12 +41,12 @@ export const PendingOrderCard = ({
 
   const getItemDetials = async () => {
     const merchRes = await axios.get(
-      ' http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_merchant/' +
+      'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_merchant/' +
         order.merch_id
     )
     setMerchant(merchRes.data.payload)
     const merchAddressRes = await axios.get(
-      ' http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_address/' +
+      'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_address/' +
         order.merch_id
     )
     setMerchantAddress(merchAddressRes.data.payload)

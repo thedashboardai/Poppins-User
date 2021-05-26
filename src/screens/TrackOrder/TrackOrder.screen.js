@@ -151,7 +151,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
           'Your order has been cancelled.',
           orderObj
         )
-        navigation.navigate("Home")
+        navigation.navigate('Home')
       }
     } else if (event?.message?.type === 'NEW') {
       // console.log('88888888888888888888888888888888888', PlacedNotified)
@@ -223,7 +223,12 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
             MerchantAddress?.latitude &&
             MerchantAddress?.latitude !== 'Unavailable' ? ( */}
 
-            <Header centerText={'Order: #' + order?.id} />
+            <Header
+              centerText={'Order: #' + order?.id}
+              leftButtonPress={() => {
+                navigation.navigate('Orders')
+              }}
+            />
             <View style={[styles.containerStyle, styles.rowSpacBtw]}>
               <View
                 style={[styles.row, { width: '100%', paddingHorizontal: 0 }]}>

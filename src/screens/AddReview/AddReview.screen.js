@@ -77,8 +77,11 @@ const AddReview = ({ navigation, route, img = mcDonald }) => {
     <ScrollView style={[styles.blockContainer, { top: 10 }]}>
       <View style={styles.main}>
         {/* <Text>Add Review #{order?.id}</Text> */}
-        <View style={[styles.blockContainer]}>
-          <Header centerText="Restaurant Rating" />
+        <View style={([styles.blockContainer], { marginTop: 15 })}>
+          <Header
+            centerText="Restaurant Rating"
+            leftButtonPress={() => navigation.navigate('Home')}
+          />
           <View style={{ padding: 12 }}>
             <AirbnbRating
               count={5}
@@ -95,7 +98,9 @@ const AddReview = ({ navigation, route, img = mcDonald }) => {
             />
           </View>
 
-          <Header centerText="Restaurant Review" />
+          <View style={[styles.headerContainer]}>
+            <Text>Restaurant Review</Text>
+          </View>
 
           <TextInput
             style={{ backgroundColor: '#fff' }}
@@ -109,7 +114,9 @@ const AddReview = ({ navigation, route, img = mcDonald }) => {
         {/* <View style={styles.divider} /> */}
 
         <View style={[styles.blockContainer]}>
-          <Header centerText="App Rating" />
+          <View style={[styles.headerContainer]}>
+            <Text>App Rating</Text>
+          </View>
           <View style={{ padding: 12 }}>
             <AirbnbRating
               count={5}
@@ -125,7 +132,10 @@ const AddReview = ({ navigation, route, img = mcDonald }) => {
               onFinishRating={appRatingCompleted}
             />
           </View>
-          <Header centerText="App Review" />
+
+          <View style={[styles.headerContainer]}>
+            <Text>App Review</Text>
+          </View>
 
           <TextInput
             style={{ backgroundColor: '#fff' }}
@@ -163,6 +173,17 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 15,
     marginTop: 10
+  },
+  headerContainer: {
+    width: '100%',
+    borderBottomColor: '#E6F0FC',
+    borderBottomWidth: 1,
+    height: Platform.OS == 'ios' ? 90 : 60,
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: Platform.OS == 'ios' ? 40 : 0
   },
   itemContainer: {
     paddingVertical: 5

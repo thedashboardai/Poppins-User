@@ -70,11 +70,11 @@ export const Map = ({
     const res = await axios.get(
       `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${parseFloat(
         UsrLocation?.latitude
-      )},${parseFloat(UsrLocation?.longitude)}&destinations=${
-        MerchantAddress.street
-      },${MerchantAddress.city},${MerchantAddress.state},${
-        MerchantAddress.country
-      },${MerchantAddress.zip_code}&key=AIzaSyDDv41SppPP1dkdSe2nwqI3LWYZ3WtGLQs`
+      )},${parseFloat(UsrLocation?.longitude)}&destinations=${parseFloat(
+        MerchantAddress.latitude
+      )},${parseFloat(
+        MerchantAddress.longitude
+      )}&key=AIzaSyDDv41SppPP1dkdSe2nwqI3LWYZ3WtGLQs`
     )
     console.log(
       'ETA $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
@@ -281,8 +281,7 @@ export const Map = ({
             apikey={GOOGLE_MAPS_APIKEY}
             timePrecision="now"
             strokeWidth={3}
-            strokeColor="cyan"
-            onUserLocationChange={coordinate => Alert.alert(coordinate)}
+            strokeColor="black"
           />
         </MapView>
       ) : (

@@ -51,9 +51,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   const [Details, setDetails] = useState(
     useSelector(state => state.userReducer.ItemDetails)
   )
-  const [MerchantAddress, setMerchantAddress] = useState(
-    route?.params?.MerchantAddress
-  )
+  const [MerchantAddress, setMerchantAddress] = useState()
   const [eta, setEta] = useState(route?.params?.eta)
   // const socket = io('https://poppins-order-service.herokuapp.com')
   const [cust_id, setCustId] = useState(
@@ -82,32 +80,32 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
   //   false /* optional: default undefined */
   // )
 
-  const getLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000
-    })
-      .then(location => {
-        console.log(location)
-        setLocation({
-          latitude: location.latitude,
-          longitude: location.longitude
-        })
-        dispatch({ type: 'SET_LOCATION', payload: location })
-      })
-      .catch(error => {
-        const { code, message } = error
-        console.error(code, message)
-        if (Platform.OS == 'android' && !enabled) {
-          navigation.navigate('EnableLocation')
-          setEnabled(true)
-        }
-      })
-  }
+  // const getLocation = () => {
+  //   GetLocation.getCurrentPosition({
+  //     enableHighAccuracy: true,
+  //     timeout: 15000
+  //   })
+  //     .then(location => {
+  //       console.log(location)
+  //       setLocation({
+  //         latitude: location.latitude,
+  //         longitude: location.longitude
+  //       })
+  //       dispatch({ type: 'SET_LOCATION', payload: location })
+  //     })
+  //     .catch(error => {
+  //       const { code, message } = error
+  //       console.error(code, message)
+  //       if (Platform.OS == 'android' && !enabled) {
+  //         navigation.navigate('EnableLocation')
+  //         setEnabled(true)
+  //       }
+  //     })
+  // }
 
-  useInterval(() => {
-    getLocation()
-  }, 3000)
+  // useInterval(() => {
+  //   getLocation()
+  // }, 3000)
 
   // const updateOrderStatus = event => {
   //   const orderObj = event?.message?.order
@@ -236,8 +234,22 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
     })
   }
 
+  const getMerchantDetails = async () => {
+    const merchRes = await axios.get(
+      'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_merchant/' +
+        order?.merch_id
+    )
+    setMerchant(merchRes.data.payload)
+    const merchAddressRes = await axios.get(
+      'http://poppins-lb-1538414865.us-east-2.elb.amazonaws.com/merchants/get_address/' +
+        order?.merch_id
+    )
+    setMerchantAddress(merchAddressRes.data.payload)
+  }
+
   useEffect(() => {
     getOrderItems()
+    getMerchantDetails()
   }, [])
 
   useEffect(() => {
@@ -321,14 +333,22 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
               </Text>
             </View>
 
-            <Map
-              mapStyle={[styles.mapStyle, { overflow: 'hidden' }]}
-              containerStyle={[styles.mapStyle, styles.mapContainer]}
-              location={location}
-              MerchantAddress={MerchantAddress}
-              eta={eta?.text ? eta : { text: 'NA', value: 0 }}
-              order={order}
-            />
+            {MerchantAddress ? (
+              <Map
+                mapStyle={[styles.mapStyle, { overflow: 'hidden' }]}
+                containerStyle={[styles.mapStyle, styles.mapContainer]}
+                location={location}
+                MerchantAddress={MerchantAddress}
+                desti={[
+                  parseFloat(MerchantAddress?.latitude),
+                  parseFloat(MerchantAddress?.longitude)
+                ]}
+                eta={eta?.text ? eta : { text: 'NA', value: 0 }}
+                order={order}
+              />
+            ) : (
+              <></>
+            )}
             {/* ) : (
               <View style={[styles.blockContainer, { top: 10 }]}>
                 <Text>Order not in track state</Text>

@@ -23,6 +23,10 @@
       android:usesCleartextTraffic="true"
       >
        
+        <!-- This should be a child of the application tag -->
+    <meta-data android:name="MAPBOX_ACCESS_TOKEN"
+        android:value="pk.eyJ1IjoiaW1yYW5mcm9tcG9wcGlucyIsImEiOiJja3A4OWZ4aHEwNm9uMnZtcDF4b25rYWhoIn0.YjkWKmKxklCzvy4Wti0w6Q" />
+    
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

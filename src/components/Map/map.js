@@ -24,6 +24,9 @@ import { usePubNub } from 'pubnub-react'
 import { useRef } from 'react'
 import KeepAwake from 'react-native-keep-awake'
 import Header from '../Header'
+import MapboxNavigation from '@homee/react-native-mapbox-navigation'
+import GetLocation from 'react-native-get-location'
+import { useDispatch } from 'react-redux'
 
 const origin = { latitude: 37.3318456, longitude: -122.0296002 }
 const destination = { latitude: 22.270041, longitude: 73.149727 }
@@ -36,106 +39,103 @@ export const Map = ({
     latitude: 0,
     longitude: 0
   },
-  MerchantAddress = {
-    latitude: 0,
-    longitude: 0
-  },
+  MerchantAddress,
   eta,
-  order
+  order,
+  desti
 }) => {
-  const [dest, setDest] = useState({
-    latitude: parseFloat(MerchantAddress?.latitude),
-    longitude: parseFloat(MerchantAddress?.longitude)
-  })
+  const [dest, setDest] = useState([
+    MerchantAddress?.latitude,
+    MerchantAddress?.longitude
+  ])
   const [Eta, setEta] = useState(eta)
   const [Loading, setLoading] = useState(false)
   const [Notify, setNotify] = useState(true)
-  const [UsrLocation, setUsrLocation] = useState({
-    latitude: 0,
-    longitude: 0
-  })
+  const [UsrLocation, setUsrLocation] = useState([0, 0])
+
+  const dispatch = useDispatch()
 
   const MapRef = useRef()
 
   const pubnub = usePubNub()
 
   useEffect(() => {
-    getEta()
     console.log('33333333333333333333333333333333', dest, MerchantAddress)
+    // getEta()
   }, [])
 
-  const getEta = async () => {
-    setLoading(true)
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@', UsrLocation, MerchantAddress)
-    const res = await axios.get(
-      `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${parseFloat(
-        UsrLocation?.latitude
-      )},${parseFloat(UsrLocation?.longitude)}&destinations=${parseFloat(
-        MerchantAddress.latitude
-      )},${parseFloat(
-        MerchantAddress.longitude
-      )}&key=AIzaSyDDv41SppPP1dkdSe2nwqI3LWYZ3WtGLQs`
-    )
-    console.log(
-      'ETA $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
-      res.data.rows[0].elements[0]?.duration
-    )
-    if (
-      res.data.rows[0].elements[0]?.duration &&
-      res.data.rows[0].elements[0]?.duration?.value != Eta?.value
-    ) {
-      MapRef.current.animateCamera(
-        {
-          center: UsrLocation,
-          pitch: UsrLocation?.pitch,
-          heading: UsrLocation?.heading,
-          altitude: UsrLocation?.altitude
-        },
-        2
-      )
-      // if (res.data.rows[0].elements[0]?.duration.value != eta?.value) {
-      setEta(
-        res.data.rows[0]?.elements[0]?.duration
-          ? res.data.rows[0]?.elements[0]?.duration
-          : { text: 'NA', value: 'NA' }
-      )
+  // const getEta = async () => {
+  //   setLoading(true)
+  //   console.log('@@@@@@@@@@@@@@@@@@@@@@@', UsrLocation, MerchantAddress)
+  //   const res = await axios.get(
+  //     `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${parseFloat(
+  //       UsrLocation?.latitude
+  //     )},${parseFloat(UsrLocation?.longitude)}&destinations=${parseFloat(
+  //       MerchantAddress.latitude
+  //     )},${parseFloat(
+  //       MerchantAddress.longitude
+  //     )}&key=AIzaSyDDv41SppPP1dkdSe2nwqI3LWYZ3WtGLQs`
+  //   )
+  //   console.log(
+  //     'ETA $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+  //     res.data.rows[0].elements[0]?.duration
+  //   )
+  //   if (
+  //     res.data.rows[0].elements[0]?.duration &&
+  //     res.data.rows[0].elements[0]?.duration?.value != Eta?.value
+  //   ) {
+  //     MapRef.current.animateCamera(
+  //       {
+  //         center: UsrLocation,
+  //         pitch: UsrLocation?.pitch,
+  //         heading: UsrLocation?.heading,
+  //         altitude: UsrLocation?.altitude
+  //       },
+  //       2
+  //     )
+  //     // if (res.data.rows[0].elements[0]?.duration.value != eta?.value) {
+  //     setEta(
+  //       res.data.rows[0]?.elements[0]?.duration
+  //         ? res.data.rows[0]?.elements[0]?.duration
+  //         : { text: 'NA', value: 'NA' }
+  //     )
 
-      // if (res.data.rows[0].elements[0]?.duration.value <= 207) {
-      //   console.log(
-      //     '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-      //   )
-      //   if (Notify) {
-      //     showNotification(
-      //       'Poppins: You are 3 mins away. Order #' + order?.id, 'Resatuarant Notified'
-      //       order
-      //     )
-      //     setNotify(false)
-      //   }
-      // }
-      setLoading(false)
+  //     // if (res.data.rows[0].elements[0]?.duration.value <= 207) {
+  //     //   console.log(
+  //     //     '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+  //     //   )
+  //     //   if (Notify) {
+  //     //     showNotification(
+  //     //       'Poppins: You are 3 mins away. Order #' + order?.id, 'Resatuarant Notified'
+  //     //       order
+  //     //     )
+  //     //     setNotify(false)
+  //     //   }
+  //     // }
+  //     setLoading(false)
 
-      try {
-        pubnub.publish(
-          {
-            channel: 'eta',
-            message: {
-              eta: res.data.rows[0].elements[0]?.duration,
-              order: order,
-              location: UsrLocation
-            }
-          },
-          function (status, response) {
-            console.log('Publish Result: ', status, response)
-          }
-        )
-      } catch (e) {
-        console.error('PUBNUB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', e)
-      }
-    }
-    // if (res.data.rows[0].elements[0]?.duration) {
-    //   updateEta(res.data.rows[0].elements[0]?.duration)
-    // }
-  }
+  //     try {
+  //       pubnub.publish(
+  //         {
+  //           channel: 'eta',
+  //           message: {
+  //             eta: res.data.rows[0].elements[0]?.duration,
+  //             order: order,
+  //             location: UsrLocation
+  //           }
+  //         },
+  //         function (status, response) {
+  //           console.log('Publish Result: ', status, response)
+  //         }
+  //       )
+  //     } catch (e) {
+  //       console.error('PUBNUB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', e)
+  //     }
+  //   }
+  //   // if (res.data.rows[0].elements[0]?.duration) {
+  //   //   updateEta(res.data.rows[0].elements[0]?.duration)
+  //   // }
+  // }
 
   // const updateEta = async eta => {
   //   if (orderStatus[order?.status_id] == 'Placed') {
@@ -207,87 +207,85 @@ export const Map = ({
     ret += '' + secs
     return ret
   }
+  const getLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000
+    })
+      .then(loc => {
+        console.log('JJJJJJJJJJJJJJJJJJJJ', loc)
+        setUsrLocation([loc?.latitude, loc?.longitude])
+        // dispatch({ type: 'SET_LOCATION', payload: location })
+      })
+      .catch(error => {
+        const { code, message } = error
+        console.error(code, message)
+        // if (Platform.OS == 'android' && !enabled) {
+        //   navigation.navigate('EnableLocation')
+        //   setEnabled(true)
+        // }
+      })
+  }
 
-  // console.log('RRRRRRRRRRRRRRRRRRRRRRRR', dest)
+  useEffect(() => {
+    getLocation()
+    setDest([MerchantAddress?.latitude, MerchantAddress?.longitude])
+  }, [])
+
+  console.log(
+    'RRRRRRRRRRRRRRRRRRRRRRRR',
+    parseFloat(dest[0]),
+    parseFloat(dest[1]),
+    parseFloat(UsrLocation[0]),
+    parseFloat(UsrLocation[1])
+  )
   return (
     <View style={[styles.container, containerStyle]}>
       {/* <Text style={{ fontWeight: 'bold' }}>
         ETA: {fancyTimeFormat(Eta?.value)}
       </Text> */}
-      <Header
-        centerText={'ETA: ' + fancyTimeFormat(Eta?.value)}
-        leftIconName=""
-      />
-      {location.latitude ? (
-        <MapView
-          ref={MapRef}
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={[styles.map, mapStyle]}
-          initialRegion={{
-            latitude: location?.latitude,
-            longitude: location?.longitude,
-            latitudeDelta: 0.0043,
-            longitudeDelta: 0.0043
-            // latitudeDelta: getRegionForCoordinates([location, dest]).latitudeDelta,
-            // longitudeDelta: getRegionForCoordinates([location, dest]).latitudeDelta
+
+      {dest[0] && UsrLocation[0] ? (
+        <MapboxNavigation
+          style={{ height: '100%', width: '100%' }}
+          origin={[parseFloat(UsrLocation[1]), parseFloat(UsrLocation[0])]}
+          destination={[parseFloat(dest[1]), parseFloat(dest[0])]}
+          // origin={[-97.760288, 30.273566]}
+          // destination={[-97.918842, 30.494466]}
+          trackUserLocation
+          shouldSimulateRoute
+          showsEndOfRouteFeedback
+          onLocationChange={event => {
+            const { latitude, longitude } = event.nativeEvent
+            console.log('QQQQQQQQQQQQQQQQQQQ', event.nativeEvent)
           }}
-          region={MapRef?.region}
-          showsCompass
-          rotateEnabled={false}
-          showsMyLocationButton
-          mapType="standard"
-          showsUserLocation={true}
-          followsUserLocation={true}
-          // onUserLocationChange={e => console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', e.nativeEvent)}
-          onUserLocationChange={e => {
-            setUsrLocation(e.nativeEvent.coordinate)
-            getEta()
+          onRouteProgressChange={event => {
+            const {
+              distanceTraveled,
+              durationRemaining,
+              fractionTraveled,
+              distanceRemaining
+            } = event.nativeEvent
+
+            console.log('YYYYYYYYYYYYYYYYYYYYYYYYYY', event.nativeEvent)
           }}
-          // getCamera={e =>
-          //   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', e.nativeEvent)
-          // }
-        >
-          {/* {!Loading ? ( */}
-          <Marker.Animated
-            coordinate={UsrLocation}
-            // title={'You'}
-            title={'ETA: ' + Eta.text}
-            icon={require('../../assets/images/car.png')}
-          />
-          {/* ) : (
-            <Marker
-              coordinate={location}
-              title={'Recalculating'}
-              icon={require('../../assets/images/car.png')}
-            />
-          )} */}
-          <Marker
-            coordinate={dest}
-            title="Merchant"
-            // icon={require('../../assets/images/mecca.png')}
-          >
-            <Image
-              style={{
-                width: 24,
-                height: 24
-                // transform: [{ rotate: `${object.rotation}deg` }]
-              }}
-              source={require('../../assets/images/mecca.png')}
-            />
-          </Marker>
-          <MapViewDirections
-            origin={UsrLocation}
-            destination={dest}
-            apikey={GOOGLE_MAPS_APIKEY}
-            timePrecision="now"
-            strokeWidth={3}
-            strokeColor="black"
-          />
-        </MapView>
+          onError={event => {
+            const { message } = event.nativeEvent
+            console.error('YYYYYYYYYYYYYYYYYYYYYYYYYY', event.nativeEvent)
+          }}
+          onCancelNavigation={event => {
+            // User tapped the "X" cancel button in the nav UI
+            // or canceled via the OS system tray on android.
+            // Do whatever you need to here.
+            console.log(event.nativeEvent)
+          }}
+          onArrive={() => {
+            // Called when you arrive at the destination.
+          }}
+        />
       ) : (
         <></>
       )}
-      <KeepAwake />
     </View>
   )
 }

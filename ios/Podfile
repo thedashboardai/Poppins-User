@@ -28,6 +28,8 @@ target 'POPPINS' do
 
   pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
 
+  pod 'react-native-mapbox-navigation', :path => '../node_modules/@homee/react-native-mapbox-navigation'
+
   target 'POPPINSTests' do
     inherit! :complete
     # Pods for testing

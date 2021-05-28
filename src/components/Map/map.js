@@ -293,7 +293,7 @@ export const Map = ({
           // origin={[-97.760288, 30.273566]}
           // destination={[-97.918842, 30.494466]}
           trackUserLocation
-          shouldSimulateRoute
+          // shouldSimulateRoute
           showsEndOfRouteFeedback
           onLocationChange={event => {
             const { latitude, longitude } = event.nativeEvent

@@ -151,6 +151,46 @@ export const Map = ({
   //   console.log(res.data)
   // }
 
+  const sendEta = async eta => {
+    try {
+      pubnub.publish(
+        {
+          channel: 'eta',
+          message: {
+            eta: eta,
+            order: order,
+            location: UsrLocation,
+            arrival: false
+          }
+        },
+        function (status, response) {
+          console.log('Publish Result: ', status, response)
+        }
+      )
+    } catch (e) {
+      console.error('PUBNUB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', e)
+    }
+  }
+
+  const arrivalNotice = async () => {
+    try {
+      pubnub.publish(
+        {
+          channel: 'eta',
+          message: {
+            order: order,
+            arrival: true
+          }
+        },
+        function (status, response) {
+          console.log('Publish Result: ', status, response)
+        }
+      )
+    } catch (e) {
+      console.error('PUBNUB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', e)
+    }
+  }
+
   function getRegionForCoordinates(points) {
     // points should be an array of { latitude: X, longitude: Y }
     let minX,
@@ -266,7 +306,7 @@ export const Map = ({
               fractionTraveled,
               distanceRemaining
             } = event.nativeEvent
-
+            sendEta(durationRemaining)
             console.log('YYYYYYYYYYYYYYYYYYYYYYYYYY', event.nativeEvent)
           }}
           onError={event => {
@@ -281,6 +321,7 @@ export const Map = ({
           }}
           onArrive={() => {
             // Called when you arrive at the destination.
+            arrivalNotice()
           }}
         />
       ) : (

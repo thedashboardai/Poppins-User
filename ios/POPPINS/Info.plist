@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>location</string>
+	</array>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1IjoiaW1yYW5mcm9tcG9wcGlucyIsImEiOiJja3A4OWZ4aHEwNm9uMnZtcDF4b25rYWhoIn0.YjkWKmKxklCzvy4Wti0w6Q</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>POPPINS need location permission to show you nearest resturants</string>
 	<key>CFBundleDevelopmentRegion</key>

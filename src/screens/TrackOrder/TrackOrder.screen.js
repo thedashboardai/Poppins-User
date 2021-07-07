@@ -170,7 +170,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       if (PlacedNotify) {
         showNotification(
           'Order #' + orderObj?.id + ' Placed',
-          'Waiting for restaurant confirmation.',
+          'Waiting for confirmation.',
           orderObj
         )
         PlacedNotify = false
@@ -179,8 +179,8 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       if (CookingNotify) {
         CookingNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Cooking 🍳',
-          'Your order is in the kitchen.',
+          'Order #' + orderObj?.id + ' Being Carted 🛒',
+          'Your order is being carted.',
           orderObj
         )
       }
@@ -188,7 +188,7 @@ const TrackOrder = ({ navigation, route, img = mcDonald }) => {
       if (CookedNotify) {
         CookedNotify = false
         showNotification(
-          'Order #' + orderObj?.id + ' Cooked 🍲',
+          'Order #' + orderObj?.id + ' Carted ✅',
           'Your order is ready.',
           orderObj
         )
